@@ -30,6 +30,11 @@ public extension And {
     try mutate(&value)
     return value
   }
+  
+  /// `as?`, but with an inferred return type.
+  @inlinable func cast<Casted>() -> Casted? {
+    value as? Casted
+  }
 
   /// Transform the wrapped value.
   @inlinable func map<Transformed, Error>(

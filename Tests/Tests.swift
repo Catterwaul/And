@@ -11,6 +11,12 @@ struct Tests {
     #expect(2&.apply { $0 *= 3 } == 6)
     #expect(Object()&.apply { $0.cat = "🐯" }.cat == "🐯")
   }
+  
+  @Test func cast() {
+    let value: Any = 0
+    #expect(value&.cast() == 0)
+    #expect(value&.cast() == Bool?.none)
+  }
 
   @Test func map() {
     do {
