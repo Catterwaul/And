@@ -1,11 +1,10 @@
-// swift-tools-version: 6.2
+// swift-tools-version: 6.4
 
 import Foundation // for String.capitalized
 import PackageDescription
 
 _ = Package(
   name: .LibraryName.unsuffixed,
-  platforms: [.iOS(.v26), .macOS(.v26)],
   products: [
     .library(
       name: .LibraryName.unsuffixed,
@@ -21,10 +20,7 @@ _ = Package(
 /// The modules that make up this package.
 var modules: [Module] {
   [ .init(
-      target: .target(name: .LibraryName.unsuffixed, path: "Sources"),
-      externalDependencies: [
-
-      ]
+      target: .target(name: .LibraryName.unsuffixed)
     ),
     .init(
       target: .testTarget(
@@ -77,18 +73,7 @@ extension Module {
 extension Module.ExternalDependency {
   // MARK: - commonly-used
   enum Swift {
-    static var algorithms: Module.ExternalDependency { apple(repositoryName: "algorithms") }
-    static var asyncAlgorithms: Module.ExternalDependency { apple(repositoryName: "async-algorithms") }
-    static var macros: Module.ExternalDependency {
-      dependency(repositoryName: "syntax", packageNames: ["SyntaxMacros", "CompilerPlugin"])
-    }
-    static var numerics: Module.ExternalDependency { dependency(repositoryName: "numerics") }
-    static var collections: Module.ExternalDependency { apple(repositoryName: "collections") }
     static var docC: Module.ExternalDependency { dependency(repositoryName: "docc-plugin") }
-
-    private static func apple(repositoryName: String) -> Module.ExternalDependency {
-      dependency(organization: "apple", repositoryName: repositoryName)
-    }
 
     private static func dependency(
       organization: String = "swiftlang", repositoryName: String,
@@ -100,35 +85,6 @@ extension Module.ExternalDependency {
         packageNames:
           packageNames.map { names in names.map { "Swift\($0)" } }
           ?? [repositoryName.split(separator: "-").map(\.capitalized).joined()]
-      )
-    }
-  }
-
-  enum Catterwaul {
-    static var and: Module.ExternalDependency { dependency(name: "And") }
-    static var cast: Module.ExternalDependency { dependency(name: "Cast") }
-    static var hmAlgorithms: Module.ExternalDependency { hm("Algorithms") }
-    static var hmError: Module.ExternalDependency { hm("Error") }
-    static var hmNumerics: Module.ExternalDependency { hm("Numerics") }
-    static var littleAny: Module.ExternalDependency { dependency(name: "LittleAny") }
-    static var thrappture: Module.ExternalDependency { dependency(name: "Thrappture") }
-    static var tuplé: Module.ExternalDependency { dependency(name: "Tuplé", repositoryName: "Tuplay") }
-
-    private static func hm(_ name: String) -> Module.ExternalDependency {
-      dependency(
-        name: "HM\(name)",
-        repositoryName: "HemiprocneMystacea\(name)"
-      )
-    }
-
-    private static func dependency(
-      name: String, repositoryName: String? = nil, branch: String? = nil
-    ) -> Module.ExternalDependency {
-      .init(
-        organization: "Catterwaul",
-        repositoryName: repositoryName ?? name,
-        packageNames: [name],
-        branch: branch
       )
     }
   }
