@@ -10,20 +10,20 @@
 /// ```swift
 /// let negativeOne = 1&.map(-)
 /// ```
-public struct And<Value> {
+public struct And<Value: ~Copyable>: ~Copyable {
   @usableFromInline let value: Value
-  @inlinable init(_ value: Value) { self.value = value }
+  @inlinable init(_ value: consuming Value) { self.value = value }
 }
 
 postfix operator &
-@inlinable public postfix func &<Value>(value: Value) -> And<Value> {
+@inlinable public postfix func &<Value: ~Copyable>(value: consuming Value) -> And<Value> {
   .init(value)
 }
 
-public extension And {
+public extension And where Value: ~Copyable {
   /// Apply a function to a mutable copy of the wrapped value.
   /// - Returns:A mutated copy of the wrapped value.
-  @inlinable func apply<Error>(
+  @inlinable consuming func apply<Error>(
     _ mutate: (inout Value) throws(Error) -> Void
   ) throws(Error) -> Value {
     var value = value
@@ -31,23 +31,28 @@ public extension And {
     return value
   }
   
-  /// `as?`, but with an inferred return type.
-  @inlinable func cast<Casted>() -> Casted? {
-    value as? Casted
-  }
-
   /// Transform the wrapped value.
-  @inlinable func map<Transformed, Error>(
-    _ transform: (Value) throws(Error) -> Transformed
+  @inlinable consuming func map<Transformed: ~Copyable, Error>(
+    _ transform: (consuming Value) throws(Error) -> Transformed
   ) throws(Error) -> Transformed {
     try transform(value)
   }
 
   /// Transform the wrapped value if a condition is satisfied.
-  @inlinable func or<Error>(
+  @inlinable consuming func or<Error>(
     if condition: Bool,
-    _ transform: (Value) throws(Error) -> Value
+    _ transform: (consuming Value) throws(Error) -> Value
   ) throws(Error) -> Value {
     condition ? try transform(value) : value
+  }
+}
+
+// MARK: Copyable
+extension And: Copyable where Value: Copyable { }
+
+public extension And {
+  /// `as?`, but with an inferred return type.
+  @inlinable func cast<Casted>() -> Casted? {
+    value as? Casted
   }
 }
