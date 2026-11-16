@@ -19,19 +19,6 @@ enum And_Tests {
     #expect(value&.cast() == Bool?.none)
   }
 
-  @Test static func map() {
-    do {
-      // This is the example in the documentation comment on the `And` type.
-      let negativeOne = 1&.map(-)
-
-      #expect(negativeOne == -1)
-    }
-
-    #expect("🐈"&.map { "🏃 \($0)" } == "🏃 🐈")
-    #expect(Object()&.map(\.cat) == "🐈")
-    #expect(NonCopyableInt(2)&.map { $0.value * 3 } == 6)
-  }
-
   @Test static func `or`() {
     var condition = false
     let pink = "🩷"

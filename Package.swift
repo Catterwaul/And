@@ -5,6 +5,7 @@ import PackageDescription
 
 _ = Package(
   name: .LibraryName.unsuffixed,
+  platforms: [.iOS(.v18), .macOS(.v15)],
   products: [
     .library(
       name: .LibraryName.unsuffixed,

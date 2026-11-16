@@ -31,13 +31,6 @@ public extension And where Value: ~Copyable {
     return value
   }
   
-  /// Transform the wrapped value.
-  @inlinable consuming func map<Transformed: ~Copyable, Error>(
-    _ transform: (consuming Value) throws(Error) -> Transformed
-  ) throws(Error) -> Transformed {
-    try transform(value)
-  }
-
   /// Transform the wrapped value if a condition is satisfied.
   @inlinable consuming func or<Error>(
     if condition: Bool,
