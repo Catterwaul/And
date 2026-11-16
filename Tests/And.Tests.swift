@@ -1,24 +1,24 @@
 import And
 import Testing
 
-struct Tests {
-  @Test func `operator`() {
+enum And_Tests {
+  @Test static func `operator`() {
     #expect(()& is And<Void>)
     #expect(("🪉" as Optional).map(&) is And<String>)
   }
 
-  @Test func apply() {
+  @Test static func apply() {
     #expect(2&.apply { $0 *= 3 } == 6)
     #expect(Object()&.apply { $0.cat = "🐯" }.cat == "🐯")
   }
   
-  @Test func cast() {
+  @Test static func cast() {
     let value: Any = 0
     #expect(value&.cast() == 0)
     #expect(value&.cast() == Bool?.none)
   }
 
-  @Test func map() {
+  @Test static func map() {
     do {
       // This is the example from `And`'s documentation.
       let negativeOne = 1&.map(-)
@@ -30,7 +30,7 @@ struct Tests {
     #expect(Object()&.map(\.cat) == "🐈")
   }
 
-  @Test func `or`() {
+  @Test static func `or`() {
     var condition = false
     let pink = "🩷"
     let green = "💚"
